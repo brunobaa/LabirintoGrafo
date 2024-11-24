@@ -2,14 +2,27 @@ import java.util.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
-import java.util.List;
 
 public class Labirinto {
     private int m, n;
     private char[][] labirinto;
     private boolean[][] visitado;
 
-    // Construtor que inicializa o labirinto e os dados necessários-gau
+    // Mapeamento de letras para raças
+private static final Map<Character, String> MAPA_RACAS = new HashMap<>();
+
+static {
+    MAPA_RACAS.put('A', "Anão");
+    MAPA_RACAS.put('B', "Elfo");
+    MAPA_RACAS.put('C', "Troll");
+    MAPA_RACAS.put('D', "Dragão");
+    MAPA_RACAS.put('E', "Orc");
+    MAPA_RACAS.put('F', "Goblin");
+    MAPA_RACAS.put('G', "Gnomo");
+    MAPA_RACAS.put('H', "Humano");
+    // Adicione outras letras e raças conforme necessário
+}
+
     public Labirinto(int m, int n, char[][] labirinto) {
         this.m = m;
         this.n = n;
@@ -17,11 +30,9 @@ public class Labirinto {
         this.visitado = new boolean[m][n];
     }
 
-    // Função para realizar a busca de regiões e contar os seres em cada região-bruno
     public void contarRegioes() {
         Map<String, Integer> frequencias = new HashMap<>();
         int numRegioes = 0;
-        int contadorDeCiclos = 0; 
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -34,30 +45,25 @@ public class Labirinto {
                         frequencias.put(entry.getKey(), frequencias.getOrDefault(entry.getKey(), 0) + entry.getValue());
                     }
                 }
-                contadorDeCiclos++;
-                if (contadorDeCiclos > m * n) {
-                    System.out.println("Loop infinito detectado. Abortando...");
-                    return;
-                }
             }
         }
 
         System.out.println("Número de regiões isoladas: " + numRegioes);
         String serMaisFrequente = frequencias.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
-        System.out.println("Ser mais frequente em todas as regiões: " + serMaisFrequente);
+        System.out.println("Raça mais frequente em todas as regiões: " + serMaisFrequente);
     }
 
-    // Função DFS que explora uma região e conta os seres-gau
     private void dfs(int i, int j, Map<String, Integer> contador) {
         if (i < 0 || i >= m || j < 0 || j >= n || visitado[i][j] || labirinto[i][j] == '#') {
             return;
         }
 
         visitado[i][j] = true;
-        String tipoSer = String.valueOf(labirinto[i][j]);
+        char tipoSer = labirinto[i][j];
 
-        if (Character.isUpperCase(labirinto[i][j])) {
-            contador.put(tipoSer, contador.getOrDefault(tipoSer, 0) + 1);
+        if (Character.isUpperCase(tipoSer)) {
+            String raca = MAPA_RACAS.getOrDefault(tipoSer, "Desconhecido");
+            contador.put(raca, contador.getOrDefault(raca, 0) + 1);
         }
 
         if (!temParede(i, j, 'U')) dfs(i - 1, j, contador); // Cima
@@ -66,7 +72,6 @@ public class Labirinto {
         if (!temParede(i, j, 'L')) dfs(i, j - 1, contador); // Esquerda
     }
 
-    // Função que verifica se existe parede em uma direção específica com base no código hexadecimal-bruno
     private boolean temParede(int i, int j, char direcao) {
         try {
             int codigo = Character.digit(labirinto[i][j], 16);
@@ -84,7 +89,7 @@ public class Labirinto {
     }
 
     public static void main(String[] args) {
-        String caminhoArquivo = "caso120_2.txt"; // Atualize para o arquivo desejado-(ajuda)
+        String caminhoArquivo = "caso40_2.txt"; // Atualize para o arquivo desejado
 
         try {
             List<String> linhas = Files.readAllLines(Paths.get(caminhoArquivo));
