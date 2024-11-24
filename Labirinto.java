@@ -8,7 +8,6 @@ public class Labirinto {
     private char[][] labirinto;
     private boolean[][] visitado;
 
-    // Mapeamento de letras para raças
 private static final Map<Character, String> MAPA_RACAS = new HashMap<>();
 
 static {
@@ -20,7 +19,7 @@ static {
     MAPA_RACAS.put('F', "Goblin");
     MAPA_RACAS.put('G', "Gnomo");
     MAPA_RACAS.put('H', "Humano");
-    // Adicione outras letras e raças conforme necessário
+    
 }
 
     public Labirinto(int m, int n, char[][] labirinto) {
