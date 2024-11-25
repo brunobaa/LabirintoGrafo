@@ -9,7 +9,7 @@ public class Labirinto {
     private boolean[][] visitado;
 
 private static final Map<Character, String> MAPA_RACAS = new HashMap<>();
-
+//aqui a gente troca as letras por raças
 static {
     MAPA_RACAS.put('A', "Anão");
     MAPA_RACAS.put('B', "Elfo");
@@ -21,14 +21,13 @@ static {
     MAPA_RACAS.put('H', "Humano");
     
 }
-
     public Labirinto(int m, int n, char[][] labirinto) {
         this.m = m;
         this.n = n;
         this.labirinto = labirinto;
         this.visitado = new boolean[m][n];
     }
-
+    //gau faz a função abaixo
     public void contarRegioes() {
         Map<String, Integer> frequencias = new HashMap<>();
         int numRegioes = 0;
@@ -52,6 +51,7 @@ static {
         System.out.println("Raça mais frequente em todas as regiões: " + serMaisFrequente);
     }
 
+    //eu faço essa
     private void dfs(int i, int j, Map<String, Integer> contador) {
         if (i < 0 || i >= m || j < 0 || j >= n || visitado[i][j] || labirinto[i][j] == '#') {
             return;
@@ -70,7 +70,7 @@ static {
         if (!temParede(i, j, 'D')) dfs(i + 1, j, contador); // Baixo
         if (!temParede(i, j, 'L')) dfs(i, j - 1, contador); // Esquerda
     }
-
+    //faz essa gau, essa é mais tranquila de fazer
     private boolean temParede(int i, int j, char direcao) {
         try {
             int codigo = Character.digit(labirinto[i][j], 16);
@@ -87,6 +87,7 @@ static {
         }
     }
 
+    //eu faço a main
     public static void main(String[] args) {
         String caminhoArquivo = "caso40_2.txt"; // Atualize para o arquivo desejado
 
